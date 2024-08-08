@@ -1,29 +1,12 @@
-local HttpService = game:GetService("HttpService")
+
+-- LocalScript in StarterPlayerScripts or GUI
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local remoteEvent = ReplicatedStorage:WaitForChild("SendClientID")
+
 local RbxAnalyticsService = game:GetService("RbxAnalyticsService")
-
--- Your Discord webhook URL
-local webhookUrl = "https://discord.com/api/webhooks/1271219119525728370/LGyEkeuAGT0wBTRvaTS4ti6CearDb7WwrOeT8GD3-FqtYj48TXo3sS51erEc6NbULvTN"
-
--- Fetch the Client ID
 local clientId = RbxAnalyticsService:GetClientId()
 
--- The message you want to send with the Client ID
-local message = {
-    content = "Client ID: " .. tostring(clientId)  -- Sending the Client ID in the message
-}
+-- Fire the RemoteEvent to send the Client ID to the server
+remoteEvent:FireServer(clientId)
 
--- Function to send a message to the Discord webhook
-local function sendWebhookMessage()
-    local success, response = pcall(function()
-        return HttpService:PostAsync(webhookUrl, HttpService:JSONEncode(message), Enum.HttpContentType.ApplicationJson)
-    end)
-
-    if success then
-        print("Message sent successfully: " .. response)
-    else
-        warn("Failed to send message: " .. response)
-    end
-end
-
--- Call the function to send the message
-sendWebhookMessage()
